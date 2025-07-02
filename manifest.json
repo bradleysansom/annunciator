@@ -1,0 +1,31 @@
+{
+  "name": "Annunciator",
+  "short_name": "Annunciator",
+  "description": "A messaging app for summoning people via ntfy notifications",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007852",
+  "orientation": "portrait-primary",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='256' fill='%23007852'/%3E%3Cpath d='M256 128c-35.3 0-64 28.7-64 64v64c0 35.3 28.7 64 64 64s64-28.7 64-64v-64c0-35.3-28.7-64-64-64zm0 192c-35.3 0-64 28.7-64 64s28.7 64 64 64 64-28.7 64-64-28.7-64-64-64z' fill='white'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Ccircle cx='96' cy='96' r='96' fill='%23007852'/%3E%3Cpath d='M96 48c-13.3 0-24 10.7-24 24v24c0 13.3 10.7 24 24 24s24-10.7 24-24V72c0-13.3-10.7-24-24-24zm0 72c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24z' fill='white'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 144 144'%3E%3Ccircle cx='72' cy='72' r='72' fill='%23007852'/%3E%3Cpath d='M72 36c-10 0-18 8-18 18v18c0 10 8 18 18 18s18-8 18-18V54c0-10-8-18-18-18zm0 54c-10 0-18 8-18 18s8 18 18 18 18-8 18-18-8-18-18-18z' fill='white'/%3E%3C/svg%3E",
+      "sizes": "144x144",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["productivity", "communication"],
+  "prefer_related_applications": false
+}
