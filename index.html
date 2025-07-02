@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annunciator v2</title>
+    <!-- Add Google Fonts - Raleway -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* CSS Custom Properties - Design System Variables */
+            
+            /* Color Palette */
+            --brand-color: rgb(0, 120, 82); 
+            --brand-color-darker: color-mix(in srgb, var(--brand-color) 90%, black);
+            --primary-red: #dc3545;
+            --primary-red-hover: #c82333;
+            --secondary-gray: #6c757d;
+            --secondary-gray-hover: #5a6268;
+            --light-gray: #f8f9fa;
+            --light-gray-hover: #e9ecef;
+            --medium-gray: #dee2e6;
+            --border-gray: #ddd;
+            --blue-accent: #cce5ff;
+            --text-dark: #212529;
+            --white: #ffffff;
+            --backdrop: rgba(0, 0, 0, 0.5);
+            --shadow: rgba(0, 0, 0, 0.15);
+            
+            /* Typography */
+            --font-family: 'Raleway', Arial, sans-serif;
+            
+            /* Spacing Scale */
+            --spacing-xs: 5px;
+            --spacing-sm: 8px;
+            --spacing-md: 10px;
+            --spacing-lg: 15px;
+            --spacing-xl: 20px;
+            
+            /* Border Radius Scale */
+            --radius-sm: 3px;
+            --radius-md: 4px;
+            --radius-lg: 8px;
+        }
+
+        /* Base Styles - Global Typography and Layout */
+        body {
+            font-family: var(--font-family);
+            max-width: 600px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+            color: var(--text-dark);
+        }
+        
+        h1, h2, h3, h4, h5, h6,
+        p, label, button, input, textarea {
+            font-family: var(--font-family);
+        }
+        
+        /* Header Section - App title and settings button */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-gray);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        /* Button System - Reusable button components */
+        .btn {
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-family: var(--font-family);
+            transition: background-color 0.2s ease;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            font-size: 14px;
+        }
+        
+        /* Primary buttons - Brand colored */
+        .btn-primary {
+            background-color: var(--brand-color);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--brand-color-darker);
+        }
+        
+        /* Secondary buttons - Neutral gray */
+        .btn-secondary {
+            background-color: var(--secondary-gray);
+            color: var(--white);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--secondary-gray-hover);
+        }
+        
+        /* Danger buttons - For destructive actions like "Remove" */
+        .btn-danger {
+            background-color: var(--primary-red);
+            color: var(--white);
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--primary-red-hover);
+        }
+        
+        /* Button Size Variants */
+        .btn-sm {
+            padding: var(--spacing-xs) var(--spacing-md);
+            font-size: 12px;
+        }
+        
+        .btn-lg {
+            padding: var(--spacing-md) var(--spacing-xl);
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        /* Modal Dialog Styles */
+        dialog {
+            border: none;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 20px var(--shadow);
+            font-family: var(--font-family);
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        dialog::backdrop {
+            background-color: var(--backdrop);
+        }
+        
+        dialog h2 {
+            margin-top: 0;
+            color: var(--brand-color);
+        }
+        
+        /* Form Styles - Main form and settings form */
+        form {
+            margin: var(--spacing-xl) 0;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .settings-form {
+            margin: var(--spacing-xl) 0;
+        }
+        
+        .settings-form label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+        }
+        
+        .settings-form input[type="text"], .settings-form input[type="color"] {
+            width: 100%;
+            padding: var(--spacing-sm);
+            border: 1px solid var(--border-gray);
+            border-radius: var(--radius-md);
+            font-family: var(--font-family);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .settings-form input[type="color"] {
+            height: 40px;
+            cursor: pointer;
+        }
+        
+        /* Color Picker Input Container - Side-by-side color picker and text input */
+        .color-input-container {
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: flex-start;
+        }
+        
+        .color-input-container input[type="color"] {
+            width: 60px;
+            height: 40px;
+            flex-shrink: 0;
+            margin-bottom: 0;
+        }
+        
+        .color-input-container input[type="text"] {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .color-input-container + .settings-form {
+            margin-top: var(--spacing-lg);
+        }
+        
+        /* Radio Button Groups - Custom styled radio buttons that look like buttons */
+        .radio-button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+        
+        .radio-button-group input[type="radio"] {
+            display: none; /* Hide default radio buttons */
+        }
+        
+        .radio-button-group label {
+            display: inline-block;
+            padding: var(--spacing-md) var(--spacing-lg);
+            background-color: #f0f0f0;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-gray);
+        }
+        
+        .radio-button-group label:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Selected radio button styling */
+        .radio-button-group input[type="radio"]:checked + label {
+            background-color: var(--brand-color);
+            color: var(--white);
+            border-color: var(--brand-color-darker);
+        }
+        
+        /* Custom Message Input - Shown when "Custom reason" is selected */
+        #customMessageContainer {
+            margin-top: var(--spacing-md);
+            display: none;
+        }
+        
+        #customMessage {
+            padding: var(--spacing-sm);
+            width: 100%;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-gray);
+            font-family: var(--font-family);
+        }
+        
+        /* Dialog Action Buttons Container */
+        .dialog-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+        }
+        
+        /* Settings Item Management - For managing person and reason lists */
+        .item-list {
+            margin: var(--spacing-md) 0;
+        }
+        
+        /* Individual draggable items in settings */
+        .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+            padding: var(--spacing-xs);
+            background-color: var(--light-gray);
+            border-radius: var(--radius-md);
+            cursor: move;
+            transition: background-color 0.2s ease;
+        }
+        
+        .item:hover {
+            background-color: var(--light-gray-hover);
+        }
+        
+        /* Drag and Drop States */
+        .item.dragging {
+            opacity: 0.5;
+            background-color: var(--medium-gray);
+        }
+        
+        .item.drag-over {
+            background-color: var(--blue-accent);
+            border: 2px dashed var(--brand-color);
+        }
+        
+        /* Drag Handle - Visual indicator for draggable items */
+        .drag-handle {
+            color: var(--secondary-gray);
+            margin-right: var(--spacing-sm);
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+        
+        /* Input fields within draggable items */
+        .item input[type="text"] {
+            flex: 1;
+            margin-right: var(--spacing-md);
+            padding: var(--spacing-xs);
+            border: 1px solid var(--border-gray);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-family);
+        }
+        
+        /* Fixed width for ID field in reason items */
+        .item input[type="text"]:first-of-type {
+            flex: 0 0 120px;
+        }
+        
+        /* Button Groups - Container for multiple buttons */
+        .button-group {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+        
+        /* Specific Layout Adjustments */
+        .btn-test {
+            margin-right: var(--spacing-md);
+        }
+        
+        header .btn {
+            font-size: 14px;
+        }
+        
+        /* Toast Notification Styles */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--brand-color);
+            color: var(--white);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 12px var(--shadow);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            font-family: var(--font-family);
+            font-weight: 500;
+            max-width: 300px;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background-color: var(--brand-color);
+        }
+        
+        .toast.error {
+            background-color: var(--primary-red);
+        }
+       
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Annunciator</h1>
+        <button id="settingsButton" class="btn btn-primary">Settings</button>
+    </header>
+    
+    <!-- Toast container for notifications -->
+    <div id="toastContainer"></div>
+    
+    <!-- Main Form - User selects person and reason to send message -->
+    <form id="intercomForm" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+            <h3>Summon...</h3>
+            <div class="radio-button-group" id="personRadioGroup">
+                <!-- Person options will be dynamically generated -->
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <h3>Because...</h3>
+            <div class="radio-button-group" id="reasonRadioGroup">
+                <!-- Reason options will be dynamically generated -->
+            </div>
+            <div id="customMessageContainer">
+                <input type="text" id="customMessage" placeholder="Enter your custom message">
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+    </form>
+
+    <!-- Settings Dialog - Configure app settings -->
+    <dialog id="settingsDialog">
+        <h2>Settings</h2>
+        
+        <!-- NTFY URL Configuration -->
+        <div class="settings-form">
+            <label for="ntfyUrlInput">Ntfy URL:</label>
+            <input type="text" id="ntfyUrlInput" placeholder="Enter your ntfy URL (e.g., your-channel-name)">
+        </div>
+        
+        <!-- Brand Color Configuration -->
+        <div class="settings-form">
+            <label for="brandColorInput">Brand Color:</label>
+            <div class="color-input-container">
+                <input type="color" id="brandColorPicker" value="#007852">
+                <input type="text" id="brandColorInput" placeholder="Enter hex color (e.g., #007852)">
+            </div>
+        </div>
+        
+        <!-- Person Options Management -->
+        <div class="settings-form">
+            <label>Person Options:</label>
+            <div class="item-list" id="personList">
+                <!-- Person inputs will be dynamically generated -->
+            </div>
+            <div class="button-group">
+                <button type="button" id="addPersonButton" class="btn btn-primary">Add Person</button>
+                <button type="button" id="sortPersonsButton" class="btn btn-secondary">Sort A-Z</button>
+            </div>
+        </div>
+        
+        <!-- Reason Options Management -->
+        <div class="settings-form">
+            <label>Reason Options:</label>
+            <div class="item-list" id="reasonList">
+                <!-- Reason inputs will be dynamically generated -->
+            </div>
+            <div class="button-group">
+                <button type="button" id="addReasonButton" class="btn btn-primary">Add Reason</button>
+                <button type="button" id="sortReasonsButton" class="btn btn-secondary">Sort A-Z</button>
+            </div>
+        </div>
+        
+        <!-- Dialog Actions -->
+        <button id="testMessageButton" class="btn btn-primary btn-test">Test Message</button>
+        <div class="dialog-buttons">
+            <button id="saveSettingsButton" class="btn btn-primary">Save</button>
+            <button id="cancelSettingsButton" class="btn btn-secondary">Cancel</button>
+        </div>
+    </dialog>
+</body>
+<script>
+    // Global Variables - Application state
+    var tags
+    var ntfy_url = localStorage.getItem('ntfy_url') || '';
+    var brandColor = localStorage.getItem('brandColor') || '#007852';
+    var personOptions = JSON.parse(localStorage.getItem('personOptions')) || ['Anyone'];
+    var reasonOptions = JSON.parse(localStorage.getItem('reasonOptions')) || [];
+    
+    // NTFY Subscription - For monitoring incoming messages
+    let eventSource = null;
+    let handshakeEventSource = null;
+    
+    // Toast Notification System
+    function showToast(message, type = 'success', duration = 5000) {
+        const toastContainer = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        
+        toastContainer.appendChild(toast);
+        
+        // Trigger animation
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+        
+        // Remove toast after duration
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, duration);
+    }
+    
+    function subscribeToNtfy(url) {
+        // Close existing connections if any
+        if (eventSource) {
+            eventSource.close();
+            console.log('Closed previous NTFY subscription');
+        }
+        
+        if (handshakeEventSource) {
+            handshakeEventSource.close();
+            console.log('Closed previous handshake subscription');
+        }
+        
+        if (!url || url.trim() === '') {
+            console.log('No NTFY URL provided, skipping subscription');
+            return;
+        }
+        
+        try {
+            // Subscribe to main NTFY channel
+            const ntfyEndpoint = `https://ntfy.sh/${url}/sse`;
+            eventSource = new EventSource(ntfyEndpoint);
+            
+            eventSource.onopen = (e) => {
+                console.log(`✅ Connected to NTFY: ${url}`);
+            };
+            
+            eventSource.onmessage = (e) => {
+                try {
+                    const messageData = JSON.parse(e.data);
+                    const timestamp = new Date().toLocaleString();
+                    
+                    // Log the complete message data
+                    console.log(`📨 [${timestamp}] NTFY Message Received:`, messageData);
+                    
+                    // Log specific fields if they exist
+                    if (messageData.message) {
+                        console.log(`   Message: "${messageData.message}"`);
+                    }
+                    if (messageData.tags && messageData.tags.length > 0) {
+                        console.log(`   Tags: [${messageData.tags.join(', ')}]`);
+                    }
+                    if (messageData.title) {
+                        console.log(`   Title: "${messageData.title}"`);
+                    }
+                } catch (parseError) {
+                    // If it's not JSON, log the raw data
+                    const timestamp = new Date().toLocaleString();
+                    console.log(`📨 [${timestamp}] NTFY Raw Message:`, e.data);
+                }
+            };
+            
+            eventSource.onerror = (e) => {
+                console.error('❌ NTFY Connection Error:', e);
+                if (eventSource.readyState === EventSource.CLOSED) {
+                    console.log('NTFY connection closed');
+                }
+            };
+            
+            // Subscribe to handshake channel
+            const handshakeEndpoint = `https://ntfy.sh/${url}_handshake/sse`;
+            handshakeEventSource = new EventSource(handshakeEndpoint);
+            
+            handshakeEventSource.onopen = (e) => {
+                console.log(`🤝 Connected to handshake channel: ${url}_handshake`);
+            };
+            
+            handshakeEventSource.onmessage = (e) => {
+                try {
+                    const messageData = JSON.parse(e.data);
+                    const timestamp = new Date().toLocaleString();
+                    
+                    // Log handshake confirmation
+                    console.log(`🤝 [${timestamp}] Handshake Confirmation Received:`, messageData);
+                    
+                    // Show success toast
+                    showToast('Message sent successfully', 'success', 5000);
+                    
+                    // Log specific fields if they exist
+                    if (messageData.message) {
+                        console.log(`   Confirmation: "${messageData.message}"`);
+                    }
+                    if (messageData.tags && messageData.tags.length > 0) {
+                        console.log(`   Original Tags: [${messageData.tags.join(', ')}]`);
+                    }
+                } catch (parseError) {
+                    // If it's not JSON, log the raw data
+                    const timestamp = new Date().toLocaleString();
+                    console.log(`🤝 [${timestamp}] Handshake Raw Confirmation:`, e.data);
+                    
+                    // Show success toast even for non-JSON responses
+                    showToast('Message sent successfully', 'success', 5000);
+                }
+            };
+            
+            handshakeEventSource.onerror = (e) => {
+                console.error('❌ Handshake Connection Error:', e);
+                if (handshakeEventSource.readyState === EventSource.CLOSED) {
+                    console.log('Handshake connection closed');
+                }
+            };
+            
+        } catch (error) {
+            console.error('Failed to subscribe to NTFY:', error);
+        }
+    }
+    
+    function unsubscribeFromNtfy() {
+        if (eventSource) {
+            eventSource.close();
+            eventSource = null;
+            console.log('🔌 Disconnected from NTFY');
+        }
+        
+        if (handshakeEventSource) {
+            handshakeEventSource.close();
+            handshakeEventSource = null;
+            console.log('🔌 Disconnected from handshake channel');
+        }
+    }
+    
+    // Color Management Functions
+    function updateBrandColor(color) {
+        document.documentElement.style.setProperty('--brand-color', color);
+        document.documentElement.style.setProperty('--brand-color-darker', `color-mix(in srgb, ${color} 90%, black)`);
+    }
+    
+    // Utility Functions
+    function rgbToHex(rgb) {
+        if (rgb.startsWith('#')) return rgb;
+        const result = rgb.match(/\d+/g);
+        if (!result || result.length < 3) return rgb;
+        return "#" + ((1 << 24) + (parseInt(result[0]) << 16) + (parseInt(result[1]) << 8) + parseInt(result[2])).toString(16).slice(1);
+    }
+    
+    function isValidHex(hex) {
+        return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex);
+    }
+    
+    // Apply brand color and start NTFY subscription on page load
+    updateBrandColor(brandColor);
+    subscribeToNtfy(ntfy_url);
+    
+    // Logging Functions - For debugging and monitoring changes
+    function logNtfyUrl(action, url) {
+        const timestamp = new Date().toLocaleString();
+        console.log(`[${timestamp}] NTFY URL ${action}: "${url}"`);
+    }
+    
+    function logPersonOptions(action, options) {
+        const timestamp = new Date().toLocaleString();
+        console.log(`[${timestamp}] Person options ${action}:`, options);
+    }
+    
+    function logReasonOptions(action, options) {
+        const timestamp = new Date().toLocaleString();
+        console.log(`[${timestamp}] Reason options ${action}:`, options);
+    }
+    
+    function logBrandColor(action, color) {
+        const timestamp = new Date().toLocaleString();
+        console.log(`[${timestamp}] Brand color ${action}: "${color}"`);
+    }
+    
+    // Initial state logging
+    if (ntfy_url) {
+        logNtfyUrl('loaded from localStorage', ntfy_url);
+    } else {
+        logNtfyUrl('not found in localStorage', '(empty)');
+    }
+    
+    logPersonOptions('loaded from localStorage', personOptions);
+    logReasonOptions('loaded from localStorage', reasonOptions);
+    logBrandColor('loaded from localStorage', brandColor);
+    
+    // Radio Button Generation Functions - Create UI elements from data
+    function generatePersonRadioButtons() {
+        const personRadioGroup = document.getElementById('personRadioGroup');
+        personRadioGroup.innerHTML = '';
+        
+        personOptions.forEach((person, index) => {
+            const personId = person.toLowerCase().replace(/\s+/g, '');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.id = personId;
+            input.name = 'person';
+            input.value = person.toLowerCase();
+            if (index === 0) input.checked = true;
+            
+            const label = document.createElement('label');
+            label.setAttribute('for', personId);
+            label.textContent = person;
+            
+            personRadioGroup.appendChild(input);
+            personRadioGroup.appendChild(label);
+        });
+    }
+    
+    function generateReasonRadioButtons() {
+        const reasonRadioGroup = document.getElementById('reasonRadioGroup');
+        reasonRadioGroup.innerHTML = '';
+        
+        // Add configured reason options
+        reasonOptions.forEach((reason, index) => {
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.id = reason.id;
+            input.name = 'reason';
+            input.value = reason.id;
+            if (index === 0 && reasonOptions.length > 0) input.checked = true;
+            
+            const label = document.createElement('label');
+            label.setAttribute('for', reason.id);
+            label.textContent = reason.title;
+            
+            reasonRadioGroup.appendChild(input);
+            reasonRadioGroup.appendChild(label);
+        });
+        
+        // Always add custom reason option
+        const customInput = document.createElement('input');
+        customInput.type = 'radio';
+        customInput.id = 'custom';
+        customInput.name = 'reason';
+        customInput.value = 'custom';
+        if (reasonOptions.length === 0) customInput.checked = true;
+        
+        const customLabel = document.createElement('label');
+        customLabel.setAttribute('for', 'custom');
+        customLabel.textContent = 'Custom reason';
+        
+        reasonRadioGroup.appendChild(customInput);
+        reasonRadioGroup.appendChild(customLabel);
+    }
+    
+    // Settings Dialog Input Generation - Create editable lists for settings
+    function generatePersonInputs() {
+        const personList = document.getElementById('personList');
+        personList.innerHTML = '';
+        
+        window.tempPersonOptions.forEach((person, index) => {
+            const personItem = document.createElement('div');
+            personItem.className = 'item person-item';
+            personItem.draggable = true;
+            personItem.dataset.index = index;
+            
+            const dragHandle = document.createElement('span');
+            dragHandle.className = 'drag-handle';
+            dragHandle.innerHTML = '⋮⋮';
+            dragHandle.title = 'Drag to reorder';
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = person;
+            input.placeholder = 'Enter person name';
+            
+            input.addEventListener('input', (e) => {
+                window.tempPersonOptions[index] = e.target.value;
+            });
+            
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'btn btn-danger btn-sm';
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', () => {
+                window.tempPersonOptions.splice(index, 1);
+                generatePersonInputs();
+            });
+            
+            // Attach drag and drop event listeners
+            personItem.addEventListener('dragstart', handlePersonDragStart);
+            personItem.addEventListener('dragover', handleDragOver);
+            personItem.addEventListener('drop', handlePersonDrop);
+            personItem.addEventListener('dragend', handleDragEnd);
+            personItem.addEventListener('dragenter', handleDragEnter);
+            personItem.addEventListener('dragleave', handleDragLeave);
+            
+            personItem.appendChild(dragHandle);
+            personItem.appendChild(input);
+            personItem.appendChild(removeButton);
+            personList.appendChild(personItem);
+        });
+    }
+    
+    function generateReasonInputs() {
+        const reasonList = document.getElementById('reasonList');
+        reasonList.innerHTML = '';
+        
+        window.tempReasonOptions.forEach((reason, index) => {
+            const reasonItem = document.createElement('div');
+            reasonItem.className = 'item reason-item';
+            reasonItem.draggable = true;
+            reasonItem.dataset.index = index;
+            
+            const dragHandle = document.createElement('span');
+            dragHandle.className = 'drag-handle';
+            dragHandle.innerHTML = '⋮⋮';
+            dragHandle.title = 'Drag to reorder';
+            
+            // ID input (used for radio button value)
+            const idInput = document.createElement('input');
+            idInput.type = 'text';
+            idInput.value = reason.id || '';
+            idInput.placeholder = 'ID (e.g., phone)';
+            
+            // Title input (displayed text)
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.value = reason.title || '';
+            titleInput.placeholder = 'Title (e.g., Someone\'s on the phone)';
+            
+            idInput.addEventListener('input', (e) => {
+                window.tempReasonOptions[index].id = e.target.value;
+            });
+            
+            titleInput.addEventListener('input', (e) => {
+                window.tempReasonOptions[index].title = e.target.value;
+            });
+            
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'btn btn-danger btn-sm';
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', () => {
+                window.tempReasonOptions.splice(index, 1);
+                generateReasonInputs();
+            });
+            
+            // Attach drag and drop event listeners
+            reasonItem.addEventListener('dragstart', handleReasonDragStart);
+            reasonItem.addEventListener('dragover', handleDragOver);
+            reasonItem.addEventListener('drop', handleReasonDrop);
+            reasonItem.addEventListener('dragend', handleDragEnd);
+            reasonItem.addEventListener('dragenter', handleDragEnter);
+            reasonItem.addEventListener('dragleave', handleDragLeave);
+            
+            reasonItem.appendChild(dragHandle);
+            reasonItem.appendChild(idInput);
+            reasonItem.appendChild(titleInput);
+            reasonItem.appendChild(removeButton);
+            reasonList.appendChild(reasonItem);
+        });
+    }
+    
+    // Sorting Functions - Alphabetical sorting with special rules
+    function sortPersonsAlphabetically() {
+        // Save current input values before sorting
+        const inputs = document.querySelectorAll('.person-item input[type="text"]');
+        inputs.forEach((input, idx) => {
+            if (idx < window.tempPersonOptions.length) {
+                window.tempPersonOptions[idx] = input.value;
+            }
+        });
+        
+        const nonEmptyOptions = window.tempPersonOptions.filter(person => person.trim() !== '');
+        
+        // Special handling: "Anyone" always goes last
+        const anyoneIndex = nonEmptyOptions.findIndex(person => person.toLowerCase() === 'anyone');
+        let anyoneOption = null;
+        
+        if (anyoneIndex !== -1) {
+            anyoneOption = nonEmptyOptions.splice(anyoneIndex, 1)[0];
+        }
+        
+        nonEmptyOptions.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        
+        if (anyoneOption) {
+            nonEmptyOptions.push(anyoneOption);
+        }
+        
+        window.tempPersonOptions = nonEmptyOptions;
+        generatePersonInputs();
+    }
+    
+    function sortReasonsAlphabetically() {
+        // Save current input values before sorting
+        const reasonItems = document.querySelectorAll('.reason-item');
+        reasonItems.forEach((item, idx) => {
+            if (idx < window.tempReasonOptions.length) {
+                const idInput = item.querySelector('input[type="text"]:first-of-type');
+                const titleInput = item.querySelector('input[type="text"]:last-of-type');
+                window.tempReasonOptions[idx].id = idInput.value;
+                window.tempReasonOptions[idx].title = titleInput.value;
+            }
+        });
+        
+        const nonEmptyOptions = window.tempReasonOptions.filter(reason => 
+            reason.id.trim() !== '' && reason.title.trim() !== ''
+        );
+        
+        // Sort by title alphabetically
+        nonEmptyOptions.sort((a, b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()));
+        
+        window.tempReasonOptions = nonEmptyOptions;
+        generateReasonInputs();
+    }
+    
+    // Drag and Drop System - Variables and handlers
+    let draggedElement = null;
+    let draggedIndex = null;
+
+    // Person drag and drop handlers
+    function handlePersonDragStart(e) {
+        draggedElement = e.currentTarget;
+        draggedIndex = parseInt(e.currentTarget.dataset.index);
+        e.currentTarget.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', draggedIndex.toString());
+    }
+
+    function handlePersonDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const targetElement = e.currentTarget;
+        
+        if (draggedElement !== targetElement && draggedIndex !== null) {
+            const targetIndex = parseInt(targetElement.dataset.index);
+            
+            // Save current values before reordering
+            const inputs = document.querySelectorAll('.person-item input[type="text"]');
+            inputs.forEach((input, idx) => {
+                window.tempPersonOptions[idx] = input.value;
+            });
+            
+            // Reorder array
+            const draggedItem = window.tempPersonOptions[draggedIndex];
+            window.tempPersonOptions.splice(draggedIndex, 1);
+            window.tempPersonOptions.splice(targetIndex, 0, draggedItem);
+            
+            generatePersonInputs();
+        }
+        
+        return false;
+    }
+    
+    // Reason drag and drop handlers
+    function handleReasonDragStart(e) {
+        draggedElement = e.currentTarget;
+        draggedIndex = parseInt(e.currentTarget.dataset.index);
+        e.currentTarget.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', draggedIndex.toString());
+    }
+
+    function handleReasonDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const targetElement = e.currentTarget;
+        
+        if (draggedElement !== targetElement && draggedIndex !== null) {
+            const targetIndex = parseInt(targetElement.dataset.index);
+            
+            // Save current values before reordering
+            const reasonItems = document.querySelectorAll('.reason-item');
+            reasonItems.forEach((item, idx) => {
+                if (idx < window.tempReasonOptions.length) {
+                    const idInput = item.querySelector('input[type="text"]:first-of-type');
+                    const titleInput = item.querySelector('input[type="text"]:last-of-type');
+                    window.tempReasonOptions[idx].id = idInput.value;
+                    window.tempReasonOptions[idx].title = titleInput.value;
+                }
+            });
+            
+            // Reorder array
+            const draggedItem = window.tempReasonOptions[draggedIndex];
+            window.tempReasonOptions.splice(draggedIndex, 1);
+            window.tempReasonOptions.splice(targetIndex, 0, draggedItem);
+            
+            generateReasonInputs();
+        }
+        
+        return false;
+    }
+
+    // Shared drag and drop handlers
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    function handleDragEnter(e) {
+        const targetItem = e.currentTarget;
+        if (targetItem !== draggedElement) {
+            targetItem.classList.add('drag-over');
+        }
+    }
+
+    function handleDragLeave(e) {
+        const targetItem = e.currentTarget;
+        if (targetItem !== draggedElement) {
+            targetItem.classList.remove('drag-over');
+        }
+    }
+    
+    function handleDragEnd(e) {
+        // Clean up all drag-related classes
+        const allItems = document.querySelectorAll('.item');
+        allItems.forEach(item => {
+            item.classList.remove('dragging', 'drag-over');
+        });
+        
+        draggedElement = null;
+        draggedIndex = null;
+    }
+    
+    // Message Functions - Send and receive messages
+    function sendMessage(person, reason, message) {
+        console.log("📤 Sending message:", person, reason, message);
+        if (!ntfy_url) {
+            alert('Please set your ntfy URL in settings first!');
+            return;
+        }
+        fetch('https://ntfy.sh/' + ntfy_url, {
+            method: 'POST',
+            body: message || 'test',
+            headers: { 'Tags': person + "," + reason }
+        }).then(response => {
+            if (response.ok) {
+                console.log('✅ Message sent successfully');
+            } else {
+                console.error('❌ Failed to send message:', response.status, response.statusText);
+                showToast('Failed to send message', 'error', 5000);
+            }
+        }).catch(error => {
+            console.error('❌ Error sending message:', error);
+            showToast('Error sending message', 'error', 5000);
+        });
+    }
+    
+    // UI Helper Functions
+    function toggleCustomMessage() {
+        const customMessageContainer = document.getElementById('customMessageContainer');
+        const customRadio = document.getElementById('custom');
+        
+        customMessageContainer.style.display = customRadio.checked ? 'block' : 'none';
+    }
+    
+    function handleSubmit(event) {
+        event.preventDefault();
+        const form = document.getElementById('intercomForm');
+        const selectedPerson = form.querySelector('input[name="person"]:checked').value;
+        const selectedReason = form.querySelector('input[name="reason"]:checked').value;
+        let message = "";
+        
+        if (selectedReason === "custom") {
+            message = document.getElementById('customMessage').value;
+        }
+        
+        sendMessage(selectedPerson, selectedReason, message);
+    }
+
+    // Initialize Application
+    document.addEventListener('DOMContentLoaded', function() {
+        generatePersonRadioButtons();
+        generateReasonRadioButtons();
+        
+        const reasonRadios = document.getElementsByName('reason');
+        reasonRadios.forEach(radio => {
+            radio.addEventListener('change', toggleCustomMessage);
+        });
+        
+        toggleCustomMessage();
+        
+        // Settings Dialog Management
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsDialog = document.getElementById('settingsDialog');
+        const saveSettingsButton = document.getElementById('saveSettingsButton');
+        const cancelSettingsButton = document.getElementById('cancelSettingsButton');
+        const testMessageButton = document.getElementById('testMessageButton');
+        const ntfyUrlInput = document.getElementById('ntfyUrlInput');
+        const brandColorInput = document.getElementById('brandColorInput');
+        const brandColorPicker = document.getElementById('brandColorPicker');
+        const addPersonButton = document.getElementById('addPersonButton');
+        const sortPersonsButton = document.getElementById('sortPersonsButton');
+        const addReasonButton = document.getElementById('addReasonButton');
+        const sortReasonsButton = document.getElementById('sortReasonsButton');
+        
+        // Store original values when dialog opens
+        let originalNtfyUrl = '';
+        let originalBrandColor = '';
+        
+        // Synchronize color picker and text input
+        brandColorPicker.addEventListener('input', (e) => {
+            brandColorInput.value = e.target.value;
+            updateBrandColor(e.target.value);
+        });
+        
+        brandColorInput.addEventListener('input', (e) => {
+            const color = e.target.value;
+            if (isValidHex(color)) {
+                brandColorPicker.value = color;
+                updateBrandColor(color);
+            }
+        });
+        
+        settingsButton.addEventListener('click', () => {
+            // Store current values and populate inputs
+            originalNtfyUrl = ntfy_url;
+            originalBrandColor = brandColor;
+            ntfyUrlInput.value = ntfy_url;
+            brandColorInput.value = brandColor;
+            brandColorPicker.value = brandColor;
+            
+            // Create temporary copies for editing
+            window.tempPersonOptions = [...personOptions];
+            window.tempReasonOptions = JSON.parse(JSON.stringify(reasonOptions));
+            generatePersonInputs();
+            generateReasonInputs();
+            
+            settingsDialog.showModal();
+        });
+        
+        addPersonButton.addEventListener('click', () => {
+            window.tempPersonOptions.push('');
+            generatePersonInputs();
+        });
+        
+        sortPersonsButton.addEventListener('click', () => {
+            sortPersonsAlphabetically();
+        });
+        
+        addReasonButton.addEventListener('click', () => {
+            window.tempReasonOptions.push({ id: '', title: '' });
+            generateReasonInputs();
+        });
+        
+        sortReasonsButton.addEventListener('click', () => {
+            sortReasonsAlphabetically();
+        });
+        
+        saveSettingsButton.addEventListener('click', () => {
+            const oldUrl = ntfy_url;
+            const oldBrandColor = brandColor;
+            
+            // Save ntfy URL
+            const newNtfyUrl = ntfyUrlInput.value;
+            ntfy_url = newNtfyUrl;
+            localStorage.setItem('ntfy_url', ntfy_url);
+            
+            // Update NTFY subscription if URL changed
+            if (oldUrl !== newNtfyUrl) {
+                subscribeToNtfy(newNtfyUrl);
+            }
+            
+            // Save brand color
+            const newBrandColor = brandColorInput.value;
+            if (isValidHex(newBrandColor)) {
+                brandColor = newBrandColor;
+                localStorage.setItem('brandColor', brandColor);
+                updateBrandColor(brandColor);
+            }
+            
+            // Save person options
+            const newPersonOptions = window.tempPersonOptions
+                .map(person => person.trim())
+                .filter(person => person !== '');
+            
+            if (newPersonOptions.length === 0) {
+                newPersonOptions.push('Anyone');
+            }
+            
+            personOptions = newPersonOptions;
+            localStorage.setItem('personOptions', JSON.stringify(personOptions));
+            
+            // Save reason options
+            const newReasonOptions = window.tempReasonOptions
+                .filter(reason => reason.id.trim() !== '' && reason.title.trim() !== '')
+                .map(reason => ({
+                    id: reason.id.trim(),
+                    title: reason.title.trim()
+                }));
+            
+            reasonOptions = newReasonOptions;
+            localStorage.setItem('reasonOptions', JSON.stringify(reasonOptions));
+            
+            // Log changes
+            if (oldUrl !== ntfy_url) {
+                logNtfyUrl('updated', ntfy_url);
+                console.log(`  Previous value: "${oldUrl}"`);
+            }
+            
+            if (oldBrandColor !== brandColor) {
+                logBrandColor('updated', brandColor);
+                console.log(`  Previous value: "${oldBrandColor}"`);
+            }
+            
+            logPersonOptions('updated', personOptions);
+            logReasonOptions('updated', reasonOptions);
+            
+            // Regenerate radio buttons with new options
+            generatePersonRadioButtons();
+            generateReasonRadioButtons();
+            
+            // Update event listeners for new reason radio buttons
+            const newReasonRadios = document.getElementsByName('reason');
+            newReasonRadios.forEach(radio => {
+                radio.addEventListener('change', toggleCustomMessage);
+            });
+            
+            // Reset toggle state
+            toggleCustomMessage();
+            
+            settingsDialog.close();
+        });
+        
+        cancelSettingsButton.addEventListener('click', () => {
+            // Revert to original values
+            ntfy_url = originalNtfyUrl;
+            brandColor = originalBrandColor;
+            ntfyUrlInput.value = originalNtfyUrl;
+            brandColorInput.value = originalBrandColor;
+            brandColorPicker.value = originalBrandColor;
+            updateBrandColor(originalBrandColor);
+            settingsDialog.close();
+        });
+        
+        testMessageButton.addEventListener('click', () => {
+            const testUrl = ntfyUrlInput.value;
+            if (!testUrl) {
+                alert('Please enter a ntfy URL first!');
+                return;
+            }
+            
+            const originalUrl = ntfy_url;
+            ntfy_url = testUrl;
+            sendMessage(null, null, "Test Message");
+            ntfy_url = originalUrl;
+        });
+        
+        settingsDialog.addEventListener('click', (event) => {
+            if (event.target === settingsDialog) {
+                // Revert to original values
+                ntfy_url = originalNtfyUrl;
+                brandColor = originalBrandColor;
+                ntfyUrlInput.value = originalNtfyUrl;
+                brandColorInput.value = originalBrandColor;
+                brandColorPicker.value = originalBrandColor;
+                updateBrandColor(originalBrandColor);
+                settingsDialog.close();
+            }
+        });
+    });
+    
+    // Clean up NTFY subscription when page unloads
+    window.addEventListener('beforeunload', () => {
+        unsubscribeFromNtfy();
+    });
+    
+</script>
+</html>
