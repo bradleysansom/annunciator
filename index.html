@@ -16,11 +16,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             /* CSS Custom Properties - Design System Variables */
             
-            /* Color Palette */
+            /* Color Palette - Light Theme */
             --brand-color: rgb(0, 120, 82); 
             --brand-color-darker: color-mix(in srgb, var(--brand-color) 90%, black);
             --primary-red: #dc3545;
@@ -36,6 +37,15 @@
             --white: #ffffff;
             --backdrop: rgba(0, 0, 0, 0.5);
             --shadow: rgba(0, 0, 0, 0.15);
+            
+            /* Background and surface colors */
+            --background-color: #ffffff;
+            --surface-color: #ffffff;
+            --card-background: #f8f9fa;
+            --input-background: #ffffff;
+            --text-color: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #ddd;
             
             /* Typography */
             --font-family: 'Raleway', Arial, sans-serif;
@@ -53,13 +63,53 @@
             --radius-lg: 8px;
         }
 
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --background-color: #1a1a1a;
+            --surface-color: #2d2d2d;
+            --card-background: #2d2d2d;
+            --input-background: #3a3a3a;
+            --text-color: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: #444444;
+            --light-gray: #2d2d2d;
+            --light-gray-hover: #3a3a3a;
+            --medium-gray: #444444;
+            --border-gray: #444444;
+            --blue-accent: #1a4a6b;
+            --backdrop: rgba(0, 0, 0, 0.8);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        /* System theme detection */
+        @media (prefers-color-scheme: dark) {
+            [data-theme="system"] {
+                --background-color: #1a1a1a;
+                --surface-color: #2d2d2d;
+                --card-background: #2d2d2d;
+                --input-background: #3a3a3a;
+                --text-color: #ffffff;
+                --text-secondary: #b0b0b0;
+                --border-color: #444444;
+                --light-gray: #2d2d2d;
+                --light-gray-hover: #3a3a3a;
+                --medium-gray: #444444;
+                --border-gray: #444444;
+                --blue-accent: #1a4a6b;
+                --backdrop: rgba(0, 0, 0, 0.8);
+                --shadow: rgba(0, 0, 0, 0.3);
+            }
+        }
+
         /* Base Styles - Global Typography and Layout */
         body {
             font-family: var(--font-family);
             max-width: 600px;
             margin: 0 auto;
             padding: var(--spacing-xl);
-            color: var(--text-dark);
+            color: var(--text-color);
+            background-color: var(--background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         h1, h2, h3, h4, h5, h6,
@@ -74,12 +124,25 @@
             align-items: center;
             margin-bottom: var(--spacing-xl);
             padding-bottom: var(--spacing-md);
-            border-bottom: 1px solid var(--border-gray);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+        
+        .header-logo {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
         }
         
         header h1 {
             margin: 0;
             font-size: 24px;
+            color: var(--text-color);
         }
         
         /* Button System - Reusable button components */
@@ -144,6 +207,8 @@
             font-family: var(--font-family);
             max-width: 500px;
             width: 90%;
+            background-color: var(--surface-color);
+            color: var(--text-color);
         }
         
         dialog::backdrop {
@@ -172,15 +237,24 @@
             display: block;
             margin-bottom: var(--spacing-xs);
             font-weight: 500;
+            color: var(--text-color);
         }
         
-        .settings-form input[type="text"], .settings-form input[type="color"] {
+        .settings-form input[type="text"], 
+        .settings-form input[type="color"],
+        .settings-form select {
             width: 100%;
             padding: var(--spacing-sm);
-            border: 1px solid var(--border-gray);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             font-family: var(--font-family);
             margin-bottom: var(--spacing-lg);
+            background-color: var(--input-background);
+            color: var(--text-color);
+        }
+        
+        .settings-form select {
+            cursor: pointer;
         }
         
         .settings-form input[type="color"] {
@@ -225,15 +299,16 @@
         .radio-button-group label {
             display: inline-block;
             padding: var(--spacing-md) var(--spacing-lg);
-            background-color: #f0f0f0;
+            background-color: var(--card-background);
             border-radius: var(--radius-md);
             cursor: pointer;
             transition: all 0.2s ease;
-            border: 1px solid var(--border-gray);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
         }
         
         .radio-button-group label:hover {
-            background-color: #e0e0e0;
+            background-color: var(--light-gray-hover);
         }
         
         /* Selected radio button styling */
@@ -253,8 +328,10 @@
             padding: var(--spacing-sm);
             width: 100%;
             border-radius: var(--radius-md);
-            border: 1px solid var(--border-gray);
+            border: 1px solid var(--border-color);
             font-family: var(--font-family);
+            background-color: var(--input-background);
+            color: var(--text-color);
         }
         
         /* Dialog Action Buttons Container */
@@ -275,10 +352,11 @@
             align-items: center;
             margin-bottom: var(--spacing-sm);
             padding: var(--spacing-xs);
-            background-color: var(--light-gray);
+            background-color: var(--card-background);
             border-radius: var(--radius-md);
             cursor: move;
             transition: background-color 0.2s ease;
+            border: 1px solid var(--border-color);
         }
         
         .item:hover {
@@ -298,7 +376,7 @@
         
         /* Drag Handle - Visual indicator for draggable items */
         .drag-handle {
-            color: var(--secondary-gray);
+            color: var(--text-secondary);
             margin-right: var(--spacing-sm);
             cursor: grab;
             user-select: none;
@@ -313,9 +391,11 @@
             flex: 1;
             margin-right: var(--spacing-md);
             padding: var(--spacing-xs);
-            border: 1px solid var(--border-gray);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             font-family: var(--font-family);
+            background-color: var(--input-background);
+            color: var(--text-color);
         }
         
         /* Fixed width for ID field in reason items */
@@ -375,7 +455,15 @@
 </head>
 <body>
     <header>
-        <h1>Annunciator</h1>
+        <div class="header-title">
+            <svg class="header-logo" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 2113.043 2113.043">
+                <g>
+                    <circle cx="1056.522" cy="1056.522" r="1056.522" fill="var(--brand-color, #007852)"/>
+                    <path d="M542.185,1506.56v-128.576h128.587v-450.049c0-88.925,26.768-167.958,80.368-237.068,53.568-69.121,123.205-114.369,208.944-135.82v-141.438h192.875v141.438c85.717,21.451,155.355,66.699,208.944,135.82,53.568,69.11,80.368,148.144,80.368,237.068v450.049h128.587v128.576H542.185ZM799.359,1377.984h514.326v-450.049c0-70.714-25.186-131.245-75.536-181.617-50.382-50.361-110.903-75.546-181.628-75.546s-131.267,25.186-181.628,75.546c-50.371,50.371-75.536,110.903-75.536,181.617v450.049ZM1056.522,1699.435c-35.357,0-65.644-12.582-90.808-37.768-25.196-25.164-37.779-55.452-37.779-90.808h257.174c0,35.357-12.614,65.644-37.779,90.808-25.186,25.186-55.452,37.768-90.808,37.768Z" fill="#f1f2f2"/>
+                </g>
+            </svg>
+            <h1>Annunciator</h1>
+        </div>
         <button id="settingsButton" class="btn btn-primary">Settings</button>
     </header>
     
@@ -385,7 +473,7 @@
     <!-- Main Form - User selects person and reason to send message -->
     <form id="intercomForm" onsubmit="handleSubmit(event)">
         <div class="form-group">
-            <h3>Summon...</h3>
+            <h3>Call for...</h3>
             <div class="radio-button-group" id="personRadioGroup">
                 <!-- Person options will be dynamically generated -->
             </div>
@@ -407,6 +495,16 @@
     <!-- Settings Dialog - Configure app settings -->
     <dialog id="settingsDialog">
         <h2>Settings</h2>
+        
+        <!-- Theme Selection -->
+        <div class="settings-form">
+            <label for="themeSelect">Theme:</label>
+            <select id="themeSelect">
+                <option value="system">System</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
         
         <!-- NTFY URL Configuration -->
         <div class="settings-form">
@@ -460,8 +558,43 @@
     var tags
     var ntfy_url = localStorage.getItem('ntfy_url') || '';
     var brandColor = localStorage.getItem('brandColor') || '#007852';
+    var themePreference = localStorage.getItem('themePreference') || 'system';
     var personOptions = JSON.parse(localStorage.getItem('personOptions')) || ['Anyone'];
     var reasonOptions = JSON.parse(localStorage.getItem('reasonOptions')) || [];
+    
+    // Theme Management Functions
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        // Update meta theme-color for PWA
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            metaThemeColor.setAttribute('content', '#1a1a1a');
+        } else {
+            metaThemeColor.setAttribute('content', '#007852');
+        }
+    }
+    
+    function setTheme(preference) {
+        themePreference = preference;
+        localStorage.setItem('themePreference', preference);
+        applyTheme(preference);
+        
+        const timestamp = new Date().toLocaleString();
+        console.log(`[${timestamp}] Theme preference set to: "${preference}"`);
+    }
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (themePreference === 'system') {
+            applyTheme('system');
+            const timestamp = new Date().toLocaleString();
+            console.log(`[${timestamp}] System theme changed to: ${e.matches ? 'dark' : 'light'}`);
+        }
+    });
+    
+    // Initialize theme on page load
+    applyTheme(themePreference);
     
     // NTFY Subscription - For monitoring incoming messages
     let eventSource = null;
@@ -635,6 +768,11 @@
     subscribeToNtfy(ntfy_url);
     
     // Logging Functions - For debugging and monitoring changes
+    function logTheme(action, theme) {
+        const timestamp = new Date().toLocaleString();
+        console.log(`[${timestamp}] Theme ${action}: "${theme}"`);
+    }
+    
     function logNtfyUrl(action, url) {
         const timestamp = new Date().toLocaleString();
         console.log(`[${timestamp}] NTFY URL ${action}: "${url}"`);
@@ -665,6 +803,7 @@
     logPersonOptions('loaded from localStorage', personOptions);
     logReasonOptions('loaded from localStorage', reasonOptions);
     logBrandColor('loaded from localStorage', brandColor);
+    logTheme('loaded from localStorage', themePreference);
     
     // Radio Button Generation Functions - Create UI elements from data
     function generatePersonRadioButtons() {
@@ -1063,6 +1202,7 @@
         const saveSettingsButton = document.getElementById('saveSettingsButton');
         const cancelSettingsButton = document.getElementById('cancelSettingsButton');
         const testMessageButton = document.getElementById('testMessageButton');
+        const themeSelect = document.getElementById('themeSelect');
         const ntfyUrlInput = document.getElementById('ntfyUrlInput');
         const brandColorInput = document.getElementById('brandColorInput');
         const brandColorPicker = document.getElementById('brandColorPicker');
@@ -1072,15 +1212,16 @@
         const sortReasonsButton = document.getElementById('sortReasonsButton');
         
         // Store original values when dialog opens
+        let originalTheme = '';
         let originalNtfyUrl = '';
         let originalBrandColor = '';
         
-        // Synchronize color picker and text input
-        brandColorPicker.addEventListener('input', (e) => {
-            brandColorInput.value = e.target.value;
-            updateBrandColor(e.target.value);
+        // Theme selection handler
+        themeSelect.addEventListener('change', (e) => {
+            setTheme(e.target.value);
         });
         
+        // Color input synchronization
         brandColorInput.addEventListener('input', (e) => {
             const color = e.target.value;
             if (isValidHex(color)) {
@@ -1089,10 +1230,18 @@
             }
         });
         
+        brandColorPicker.addEventListener('input', (e) => {
+            const color = e.target.value;
+            brandColorInput.value = color;
+            updateBrandColor(color);
+        });
+        
         settingsButton.addEventListener('click', () => {
             // Store current values and populate inputs
+            originalTheme = themePreference;
             originalNtfyUrl = ntfy_url;
             originalBrandColor = brandColor;
+            themeSelect.value = themePreference;
             ntfyUrlInput.value = ntfy_url;
             brandColorInput.value = brandColor;
             brandColorPicker.value = brandColor;
@@ -1125,8 +1274,15 @@
         });
         
         saveSettingsButton.addEventListener('click', () => {
+            const oldTheme = themePreference;
             const oldUrl = ntfy_url;
             const oldBrandColor = brandColor;
+            
+            // Save theme preference
+            const newTheme = themeSelect.value;
+            if (oldTheme !== newTheme) {
+                setTheme(newTheme);
+            }
             
             // Save ntfy URL
             const newNtfyUrl = ntfyUrlInput.value;
@@ -1170,6 +1326,11 @@
             localStorage.setItem('reasonOptions', JSON.stringify(reasonOptions));
             
             // Log changes
+            if (oldTheme !== themePreference) {
+                logTheme('updated', themePreference);
+                console.log(`  Previous value: "${oldTheme}"`);
+            }
+            
             if (oldUrl !== ntfy_url) {
                 logNtfyUrl('updated', ntfy_url);
                 console.log(`  Previous value: "${oldUrl}"`);
@@ -1201,8 +1362,10 @@
         
         cancelSettingsButton.addEventListener('click', () => {
             // Revert to original values
+            setTheme(originalTheme);
             ntfy_url = originalNtfyUrl;
             brandColor = originalBrandColor;
+            themeSelect.value = originalTheme;
             ntfyUrlInput.value = originalNtfyUrl;
             brandColorInput.value = originalBrandColor;
             brandColorPicker.value = originalBrandColor;
@@ -1226,8 +1389,10 @@
         settingsDialog.addEventListener('click', (event) => {
             if (event.target === settingsDialog) {
                 // Revert to original values
+                setTheme(originalTheme);
                 ntfy_url = originalNtfyUrl;
                 brandColor = originalBrandColor;
+                themeSelect.value = originalTheme;
                 ntfyUrlInput.value = originalNtfyUrl;
                 brandColorInput.value = originalBrandColor;
                 brandColorPicker.value = originalBrandColor;
